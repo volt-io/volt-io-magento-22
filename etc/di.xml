@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Volt\Payment\Gateway\Authentication\AuthenticationInterface"
+                type="Volt\Payment\Gateway\Authentication\Authentication" />
+
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="VoltPaymentFacade" type="Volt\Payment\Model\Method\Volt">
+        <arguments>
+            <argument name="code" xsi:type="const">Volt\Payment\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">VoltPaymentValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">VoltPaymentCommandPool</argument>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <type name="Volt\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Volt\Payment\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+
+    <!-- Logger, initialized with VoltPaymentConfig -->
+    <virtualType name="VoltPaymentLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+            <argument name="config" xsi:type="object">Volt\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Volt\Payment\Gateway\Http\Client\VoltClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+            <argument name="converter" xsi:type="object">Volt\Payment\Gateway\Http\Converter\JsonToArray</argument>
+        </arguments>
+    </type>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="VoltPaymentCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">VoltPaymentAuthorizeCommand</item>
+                <item name="refund" xsi:type="string">VoltPaymentRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoltNotificationCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="pending" xsi:type="string">Volt\Payment\Gateway\Command\PaymentPending</item>
+                <item name="delayed_at_bank" xsi:type="string">Volt\Payment\Gateway\Command\PaymentPending</item>
+                <item name="completed" xsi:type="string">Volt\Payment\Gateway\Command\PaymentPending</item>
+                <item name="bank_redirect" xsi:type="string">Volt\Payment\Gateway\Command\PaymentPending</item>
+                <item name="awaiting_checkout_authorization" xsi:type="string">Volt\Payment\Gateway\Command\PaymentPending</item>
+                <item name="failed" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="refused_by_bank" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="error_at_bank" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="cancelled_by_user" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="abandoned" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="refused_by_risk" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="not_received" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="abandoned_by_user" xsi:type="string">Volt\Payment\Gateway\Command\PaymentFailed</item>
+                <item name="received" xsi:type="string">Volt\Payment\Gateway\Command\PaymentReceived</item>
+                <item name="refund_confirmed" xsi:type="string">Volt\Payment\Gateway\Command\RefundConfirmed</item>
+                <item name="refund_failed" xsi:type="string">Volt\Payment\Gateway\Command\RefundFailed</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands -->
+    <virtualType name="VoltPaymentAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">VoltPaymentAuthorizeRequest</argument>
+            <argument name="handler" xsi:type="object">VoltPaymentResponse</argument>
+            <argument name="transferFactory" xsi:type="object">Volt\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Volt\Payment\Gateway\Http\Client\VoltClient</argument>
+            <argument name="validator" xsi:type="object">VoltPaymentValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoltPaymentRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">VoltPaymentRefundRequest</argument>
+            <argument name="handler" xsi:type="object">VoltPaymentRefundResponse</argument>
+            <argument name="transferFactory" xsi:type="object">Volt\Payment\Gateway\Http\RefundTransferFactory</argument>
+            <argument name="client" xsi:type="object">Volt\Payment\Gateway\Http\Client\VoltClient</argument>
+            <argument name="validator" xsi:type="object">VoltPaymentValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Requests -->
+    <virtualType name="VoltPaymentAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+         <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="payment_id" xsi:type="string">Volt\Payment\Gateway\Request\PaymentIdDataBuilder</item>
+                <item name="payment" xsi:type="string">Volt\Payment\Gateway\Request\PaymentDataBuilder</item>
+                <item name="customer" xsi:type="string">Volt\Payment\Gateway\Request\CustomerDataBuilder</item>
+                <item name="store_id" xsi:type="string">Volt\Payment\Gateway\Request\StoreIdDataBuilder</item>
+                <item name="authentication" xsi:type="string">Volt\Payment\Gateway\Request\AuthenticationDataBuilder</item>
+                <item name="country" xsi:type="string">Volt\Payment\Gateway\Request\CountryDataBuilder</item>
+                <item name="language" xsi:type="string">Volt\Payment\Gateway\Request\LanguageDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoltPaymentRefundRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="amount" xsi:type="string">Volt\Payment\Gateway\Request\RefundAmountDataBuilder</item>
+                <item name="payment_id" xsi:type="string">Volt\Payment\Gateway\Request\RefundPaymentIdDataBuilder</item>
+                <item name="store_id" xsi:type="string">Volt\Payment\Gateway\Request\StoreIdDataBuilder</item>
+                <item name="authentication" xsi:type="string">Volt\Payment\Gateway\Request\AuthenticationDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Response handlers -->
+    <virtualType name="VoltPaymentResponse" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="txnid" xsi:type="string">Volt\Payment\Gateway\Response\TransactionIdHandler</item>
+                <item name="redirect_url" xsi:type="string">Volt\Payment\Gateway\Response\RedirectUrlHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoltPaymentRefundResponse" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="txnid" xsi:type="string">Volt\Payment\Gateway\Response\TransactionIdHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="VoltPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">VoltPaymentConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VoltPaymentConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Volt\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Volt\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">Volt\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
+    <!-- Validator -->
+    <virtualType name="VoltPaymentValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="common" xsi:type="string">Volt\Payment\Gateway\Validator\ExceptionValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoltNotificationValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="common" xsi:type="string">Volt\Payment\Gateway\Validator\Notification\HeaderValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Volt\Payment\Gateway\Validator\Notification\HeaderValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">Volt\Payment\Gateway\Config\Config</argument>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- Authentication -->
+    <type name="Volt\Payment\Gateway\Authentication\Authentication">
+        <arguments>
+            <argument name="client" xsi:type="object">Volt\Payment\Gateway\Http\Client\VoltClient</argument>
+            <argument name="config" xsi:type="object">Volt\Payment\Gateway\Config\Config</argument>
+            <argument name="cache" xsi:type="object">Volt\Payment\Model\Cache\Type\VoltCache</argument>
+        </arguments>
+    </type>
+
+    <!-- Logger -->
+    <type name="Volt\Payment\Model\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Volt\Payment\Model\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">voltLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Volt\Payment\Model\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Data builders -->
+    <type name="Volt\Payment\Gateway\Request\AuthenticationDataBuilder">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- Controllers -->
+    <type name="Volt\Payment\Controller\Payment\Back">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Volt\Payment\Controller\Payment\Verify">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Volt\Payment\Controller\Payment\Notification">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- Notification Processor -->
+    <type name="Volt\Payment\Gateway\NotificationProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">Volt\Payment\Model\Logger\Logger</argument>
+            <argument name="commandPool" xsi:type="object">VoltNotificationCommandPool</argument>
+            <argument name="validator" xsi:type="object">VoltNotificationValidator</argument>
+        </arguments>
+    </type>
+</config>

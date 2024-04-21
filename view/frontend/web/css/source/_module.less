@@ -1,0 +1,81 @@
+@volt-color: #1B63CF;
+@volt-text-darker: #192353;
+@volt-text-dark: #3D477B;
+@volt-color-shadow: #DBE4FA;
+@volt-white: #FFFFFF;
+
+& when (@media-common = true) {
+    .payment-method-volt {
+        .payment-method-title {
+            display: flex;
+            align-items: center;
+
+            .payment-icon {
+                height: 40px;
+            }
+
+            .payment-method-text {
+                margin-left: 8px;
+            }
+
+            .payment-method-name {
+                display: block;
+                float: left;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            .payment-method-info {
+                display: block;
+                float: left;
+                height: 16px;
+                width: 16px;
+                background: url('../Volt_Payment/images/icons/info.svg');
+                cursor: pointer;
+                margin: 4px 0 0 8px;
+            }
+
+            .payment-method-description {
+                display: block;
+                clear: both;
+                font-weight: 500;
+                font-size: 12px;
+                color: #333333;
+            }
+
+            .label {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding-left: 5px;
+            }
+
+            .banks {
+                display: none;
+                margin-left: auto;
+
+                img {
+                    width: 64px;
+                    height: 40px;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .payment-method-volt {
+        .payment-method-title {
+            .banks {
+                display: flex;
+            }
+        }
+    }
+}
+
+@import "_modal";

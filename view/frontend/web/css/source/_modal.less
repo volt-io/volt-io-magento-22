@@ -1,0 +1,264 @@
+& when (@media-common = true) {
+    .payment-method-volt {
+        .volt-modal {
+            // Make sure that modal will not be shown when JS error occurs
+            display: none;
+        }
+    }
+}
+
+.volt-modal-wrapper {
+    .modal-popup {
+        left: 20px !important;
+        right: 20px !important;
+        top: 20px !important;
+        bottom: 20px !important;
+        display: flex;
+        align-items: stretch;
+
+        & .modal-header,
+        & .modal-footer {
+            display: none;
+        }
+
+        & .modal-content {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .modal-inner-wrap {
+        flex: 1;
+        margin: 0;
+        max-height: unset !important;
+        width: auto;
+    }
+
+    .modal-content {
+        display: flex;
+        flex: 1;
+    }
+
+    .volt-modal {
+        display: flex;
+        flex: 1;
+        align-items: stretch;
+
+        // Desktop
+        &--container {
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 24px 0;
+        }
+        &--bg {
+            display: none;
+            flex: 1;
+            position: relative;
+            z-index: 0;
+
+            background: url('../Volt_Payment/images/modal/bg.png');
+            background-size: cover;
+
+            &--girl {
+                position: absolute;
+                height: 100%;
+                width: ~"calc(100% + 200px)";
+                background-size: cover;
+                right: 0;
+
+                background: url('../Volt_Payment/images/modal/girl.png') no-repeat right;
+                background-size: contain;
+            }
+        }
+
+        // Mobile
+        &--bg-mobile {
+            margin: 24px 0;
+            background: url('../Volt_Payment/images/modal/bg.png') no-repeat center;
+            background-size: cover;
+            height: 200px;
+
+            &--girl {
+                background: url('../Volt_Payment/images/modal/girl.png') no-repeat right;
+                background-size: contain;
+                height: 200px;
+            }
+        }
+
+        &--header {
+            margin: 0 0 8px 0;
+            padding: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: @volt-text-darker;
+            text-align: center;
+        }
+
+        &--subheader {
+            margin: 0;
+            padding: 0;
+            color: @volt-text-dark;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        &--items {
+            margin: 0 32px 20px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        &--item {
+            display: flex;
+            gap: 16px;
+
+            &-num {
+                flex: 0 0 18px;
+                display: flex;
+                flex-wrap: wrap;
+                height: 18px;
+                width: 18px;
+                align-content: center;
+                justify-content: center;
+
+                background-color: @volt-color;
+                border-radius: 60px;
+                border: 5px solid @volt-color-shadow;
+
+                color: @volt-white;
+                font-size: 10px;
+            }
+
+            &-right {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            &-header {
+                font-size: 16px;
+                font-weight: 600;
+                color: @volt-text-darker;
+            }
+
+            &-text {
+                font-size: 14px;
+                color: @volt-text-dark;
+            }
+        }
+
+        &--button {
+            flex-grow: 0;
+            margin: auto 32px 0 32px;
+            background-color: @volt-color;
+            color: @volt-white;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:active,
+            &:focus,
+            &:hover {
+                // Overwrite default Magento styles
+                box-shadow: none;
+                border: none;
+                color: @volt-white;
+                background-color: darken(@volt-color, 10%);
+            }
+        }
+    }
+}
+
+//
+// Tablet
+// _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .volt-modal-wrapper {
+        .modal-inner-wrap {
+
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .volt-modal-wrapper {
+        .modal-popup {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .modal-inner-wrap {
+            position: relative;
+            margin-left: 0 !important;
+            max-width: 880px !important;
+            width: unset !important;
+            left: unset !important;
+        }
+
+        .volt-modal {
+            min-height: 550px;
+
+            &--bg-mobile {
+                display: none;
+            }
+
+            &--bg {
+                display: flex;
+            }
+
+            &--container {
+                padding: 40px;
+            }
+
+            &--header {
+                text-align: left;
+                font-size: 24px;
+            }
+
+            &--subheader {
+                text-align: left;
+                font-size: 17px;
+            }
+
+            &--items {
+                margin: 40px 0;
+                gap: 40px;
+            }
+
+            &--item {
+                gap: 20px;
+
+                &-num {
+                    flex: 0 0 30px;
+                    height: 30px;
+                    width: 30px;
+                    border-size: 6px;
+                    font-size: 12px;
+                }
+                &-header {
+                    font-size: 20px;
+                }
+                &-text {
+                    font-size: 17px;
+                }
+            }
+
+            &--button {
+                margin: auto 0 0 0;
+            }
+        }
+    }
+}
