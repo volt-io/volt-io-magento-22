@@ -22,7 +22,7 @@ class PaymentPending extends AbstractPaymentCommand
         TransactionInterface $transaction,
         OrderPaymentInterface $payment,
         array $commandSubject
-    ): void {
+    ) {
         $order = $payment->getOrder();
 
         if (! $transaction->getIsClosed()) {

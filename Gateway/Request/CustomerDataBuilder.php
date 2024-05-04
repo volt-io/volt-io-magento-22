@@ -13,41 +13,41 @@ class CustomerDataBuilder implements BuilderInterface
     /**
      * Information about the shopper
      */
-    public const SHOPPER = 'shopper';
+    const SHOPPER = 'shopper';
 
     /**
      * This should uniquely identify a payer in your system,
      * and must be between three and 36 characters using numbers and letters only.
      * Required.
      */
-    public const REFERENCE = 'reference';
+    const REFERENCE = 'reference';
 
     /**
      * A valid email address for the payer, up to 255 characters.
      * Optional.
      */
-    public const EMAIL = 'email';
+    const EMAIL = 'email';
 
     /**
      * Shopper's organisation name (required when firstName and lastName not provided).
      */
-    public const ORGANISATION_NAME = 'organisationName';
+    const ORGANISATION_NAME = 'organisationName';
 
     /**
      * Shopper's first name (required when lastName provided).
      */
-    public const FIRST_NAME = 'firstName';
+    const FIRST_NAME = 'firstName';
 
     /**
      * Shopper's last name (required when firstName provided).
      */
-    public const LAST_NAME = 'lastName';
+    const LAST_NAME = 'lastName';
 
     /***
      * The payer’s IP address, in IPV4 format (xxx.xxx.xxx.xxx).
      * Optional.
      */
-    public const IP = 'ip';
+    const IP = 'ip';
 
     /**
      * @var SubjectReader

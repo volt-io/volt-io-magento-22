@@ -15,12 +15,12 @@ class HeaderValidator extends AbstractValidator
     /**
      * Delimiter for verifying signature
      */
-    protected const DELIMITER = '|';
+    const DELIMITER = '|';
 
     /**
      * Algorithm for verifying signature
      */
-    protected const ALGORITHM = 'sha256';
+    const ALGORITHM = 'sha256';
 
     /**
      * @var LoggerInterface

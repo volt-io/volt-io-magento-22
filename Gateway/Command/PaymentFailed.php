@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 class PaymentFailed extends AbstractPaymentCommand
 {
     /** Key for detailed status (if exists). */
-    private const DETAILED_STATUS_KEY = 'detailedStatus';
+    const DETAILED_STATUS_KEY = 'detailedStatus';
 
     /**
      * Process payment.
@@ -25,7 +25,7 @@ class PaymentFailed extends AbstractPaymentCommand
         TransactionInterface $transaction,
         OrderPaymentInterface $payment,
         array $commandSubject
-    ): void {
+    ) {
         $order = $payment->getOrder();
         $comment = $this->getComment($commandSubject);
 

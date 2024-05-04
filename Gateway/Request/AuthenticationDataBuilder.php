@@ -14,7 +14,7 @@ use Volt\Payment\Gateway\SubjectReader;
 
 class AuthenticationDataBuilder implements BuilderInterface
 {
-    public const BEARER_TOKEN = 'bearer_token';
+    const BEARER_TOKEN = 'bearer_token';
 
     /**
      * @var SubjectReader

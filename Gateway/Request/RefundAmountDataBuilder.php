@@ -12,7 +12,7 @@ class RefundAmountDataBuilder implements BuilderInterface
     /**
      * Is the amount you want to refund (in minor units).
      */
-    public const AMOUNT = 'amount';
+    const AMOUNT = 'amount';
 
     /**
      * @var SubjectReader

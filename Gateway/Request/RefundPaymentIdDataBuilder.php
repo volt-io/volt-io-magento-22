@@ -12,7 +12,7 @@ class RefundPaymentIdDataBuilder implements BuilderInterface
     /**
      * Payment ID
      */
-    public const PAYMENT_ID = 'payment_id';
+    const PAYMENT_ID = 'payment_id';
 
     /**
      * @var SubjectReader

@@ -6,11 +6,11 @@ namespace Volt\Payment\Gateway\Http\Client\Adapters;
 
 class ZendAdapter implements AdapterInterface
 {
-    /** @var \Magento\Framework\HTTP\ZendClient */
+    /** @var \Volt\Payment\Model\Zend\Client */
     protected $client;
 
     public function __construct(
-        \Magento\Framework\HTTP\ZendClient $client
+        \Volt\Payment\Model\Zend\Client $client
     ) {
         $this->client = $client;
     }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Volt\Payment\Gateway\Http\Client\Adapters;
 
-use Laminas\Http\Response;
-
 interface AdapterInterface
 {
     /**
@@ -73,7 +71,7 @@ interface AdapterInterface
     public function setRawBody(string $body, string $encType): self;
 
     /**
-     * @return Response|\Zend_Http_Response
+     * @return \Laminas\Http\Response|\Zend_Http_Response
      */
     public function send();
 }

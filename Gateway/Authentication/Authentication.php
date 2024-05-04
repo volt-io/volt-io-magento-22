@@ -19,32 +19,32 @@ class Authentication
     /**
      * Path to oAuth API.
      */
-    private const PATH = '/oauth';
+    const PATH = '/oauth';
 
     /**
      * Used method (GET, POST).
      */
-    private const METHOD = 'POST';
+    const METHOD = 'POST';
 
     /**
      * oAuth Grant type.
      */
-    private const GRANT_TYPE = 'password';
+    const GRANT_TYPE = 'password';
 
     /**
      * Cache identifier.
      */
-    private const CACHE_IDENTIFIER = 'volt_authentication';
+    const CACHE_IDENTIFIER = 'volt_authentication';
 
     /**
      * Cache tags.
      */
-    private const CACHE_TAGS = ['volt', 'auth'];
+    const CACHE_TAGS = ['volt', 'auth'];
 
     /**
      * Cache lifetime in seconds.
      */
-    private const CACHE_LIFETIME = 3600; // 1 hour
+    const CACHE_LIFETIME = 3600; // 1 hour
 
     /**
      * @var Config
@@ -155,7 +155,7 @@ class Authentication
         ];
     }
 
-    private function getFromCache(): ?array
+    private function getFromCache()
     {
         $data = $this->cache->load(self::CACHE_IDENTIFIER);
 
@@ -166,7 +166,7 @@ class Authentication
         return null;
     }
 
-    private function saveToCache(array $data): void
+    private function saveToCache(array $data)
     {
         $this->cache->save(
             $this->serializer->serialize($data),

@@ -6,7 +6,6 @@ namespace Volt\Payment\Gateway\Command;
 
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Model\Order;
 
 class RefundFailed extends AbstractRefundCommand
 {
@@ -22,7 +21,7 @@ class RefundFailed extends AbstractRefundCommand
         TransactionInterface $transaction,
         OrderPaymentInterface $payment,
         array $commandSubject
-    ): void {
+    ) {
         $order = $payment->getOrder();
         $comment = $this->getComment($commandSubject);
 

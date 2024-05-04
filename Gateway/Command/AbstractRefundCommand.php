@@ -8,20 +8,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Api\OrderPaymentRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Psr\Log\LoggerInterface;
-use Volt\Payment\Gateway\Config\Config;
-use Volt\Payment\Model\GetStateForStatus;
-use Volt\Payment\Model\Repository\TransactionRepository;
 
 abstract class AbstractRefundCommand extends AbstractPaymentCommand implements CommandInterface
 {
-    public const KEY_REFUND_ID = 'refundId';
-    public const KEY_PAYMENT_ID = 'paymentId';
-    public const KEY_AMOUNT = 'amount';
-    public const KEY_CURRENCY = 'currency';
-    public const KEY_STATUS = 'status';
+    const KEY_REFUND_ID = 'refundId';
+    const KEY_PAYMENT_ID = 'paymentId';
+    const KEY_AMOUNT = 'amount';
+    const KEY_CURRENCY = 'currency';
+    const KEY_STATUS = 'status';
 
     /**
      * Get Magento transaction by txn id.
@@ -30,7 +24,7 @@ abstract class AbstractRefundCommand extends AbstractPaymentCommand implements C
      * @return TransactionInterface|null
      * @throws NoSuchEntityException
      */
-    protected function getTransaction(array $commandSubject): ?TransactionInterface
+    protected function getTransaction(array $commandSubject)
     {
         $txnId = $commandSubject[self::KEY_PAYMENT_ID];
 
@@ -40,9 +34,9 @@ abstract class AbstractRefundCommand extends AbstractPaymentCommand implements C
     /**
      * @param TransactionInterface $transaction
      *
-     * @return OrderPaymentInterface
+     * @return OrderPaymentInterface|null
      */
-    protected function getPaymentByTransaction(TransactionInterface $transaction): ?OrderPaymentInterface
+    protected function getPaymentByTransaction(TransactionInterface $transaction)
     {
         return $this->orderPaymentRepository->get($transaction->getPaymentId());
     }

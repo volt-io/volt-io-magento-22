@@ -19,25 +19,25 @@ class RefundTransferFactory implements TransferFactoryInterface
     /**
      * Path to payments API.
      */
-    public const PATH = '/payments/{paymentId}/request-refund';
+    const PATH = '/payments/{paymentId}/request-refund';
 
     /**
      * Used method (GET, POST).
      */
-    public const POST = 'POST';
+    const POST = 'POST';
 
     /**
      * Header name constants.
      */
-    public const HEADER_CONTENT_TYPE = 'Content-Type';
-    public const HEADER_AUTHORIZATION = 'Authorization';
-    public const HEADER_VOLT_PARTNER_ID = 'Volt-Partner-Attribution-Id';
+    const HEADER_CONTENT_TYPE = 'Content-Type';
+    const HEADER_AUTHORIZATION = 'Authorization';
+    const HEADER_VOLT_PARTNER_ID = 'Volt-Partner-Attribution-Id';
 
     /**
      * Header value constants.
      */
-    public const HEADER_JSON = 'application/json';
-    public const VOLT_PARTNER_ID = '78884f87-0171-4937-9d3c-99f36400c4c5';
+    const HEADER_JSON = 'application/json';
+    const VOLT_PARTNER_ID = '78884f87-0171-4937-9d3c-99f36400c4c5';
 
     /**
      * @var TransferBuilder

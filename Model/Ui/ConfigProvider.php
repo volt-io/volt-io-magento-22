@@ -7,7 +7,6 @@ namespace Volt\Payment\Model\Ui;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
-use PayU\PaymentGateway\Api\PayUConfigInterface;
 use Volt\Payment\Gateway\Config\Config;
 
 final class ConfigProvider implements ConfigProviderInterface
@@ -15,17 +14,17 @@ final class ConfigProvider implements ConfigProviderInterface
     /**
      * @var string Method code
      */
-    public const CODE = 'volt';
+    const CODE = 'volt';
 
     /**
      * @var string Redirect route
      */
-    private const REDIRECT_ROUTE = 'volt/payment/redirect';
+    const REDIRECT_ROUTE = 'volt/payment/redirect';
 
     /**
      * @var string Logo source
      */
-    private const LOGO_SRC = 'Volt_Payment::images/logo.svg';
+    const LOGO_SRC = 'Volt_Payment::images/logo.svg';
 
     /**
      * @var Config

@@ -14,7 +14,7 @@ class LanguageDataBuilder implements BuilderInterface
     /**
      * English (“en”) is the default language on our checkout and confirmation pages. If you would prefer to localise these pages, add the language parameter and the appropriate language code to the checkout URL.
      */
-    public const LANGUAGE = 'language';
+    const LANGUAGE = 'language';
 
     /**
      * @var SubjectReader

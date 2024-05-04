@@ -16,7 +16,7 @@ class RedirectUrlHandler implements HandlerInterface
     /**
      * @var string Redirect URL key
      */
-    public const REDIRECT_URL = 'redirectUrl';
+    const REDIRECT_URL = 'redirectUrl';
 
     /**
      * @var SubjectReader

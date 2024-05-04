@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Volt\Payment\Controller\Payment;
 
 use Magento\Checkout\Model\Session;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Volt\Payment\Gateway\Response\RedirectUrlHandler;
 
-class Redirect implements HttpGetActionInterface
+class Redirect extends Action
 {
     /**
      * @var RedirectFactory
@@ -24,13 +25,16 @@ class Redirect implements HttpGetActionInterface
     /**
      * Redirect constructor.
      *
-     * @param RedirectFactory $redirectFactory
-     * @param Session $checkoutSession
+     * @param  Context  $context
+     * @param  RedirectFactory  $redirectFactory
+     * @param  Session  $checkoutSession
      */
     public function __construct(
+        Context $context,
         RedirectFactory $redirectFactory,
         Session $checkoutSession
     ) {
+        parent::__construct($context);
         $this->redirectFactory = $redirectFactory;
         $this->checkoutSession = $checkoutSession;
     }

@@ -14,9 +14,9 @@ use Volt\Payment\Gateway\Http\TransferFactory;
 
 class VoltClient implements ClientInterface
 {
-    public const GET = 'GET';
-    public const POST = 'POST';
-    public const PUT = 'PUT';
+    const GET = 'GET';
+    const POST = 'POST';
+    const PUT = 'PUT';
 
     /**
      * @var HttpClientFactory
@@ -63,7 +63,6 @@ class VoltClient implements ClientInterface
             'headers' => $transferObject->getHeaders(),
             'request' => $transferObject->getBody(),
             'request_uri' => $transferObject->getUri(),
-            'headers' => $transferObject->getHeaders(),
         ];
         $result = [];
         $client = $this->clientFactory->create();
@@ -106,7 +105,11 @@ class VoltClient implements ClientInterface
                 : [$response->getBody()];
 
             $log['response'] = $response->getBody();
-        } catch (\Zend_Http_Client_Exception|\Laminas\Http\Client\Exception\ExceptionInterface $e) {
+        } catch (\Zend_Http_Client_Exception $e) {
+            throw new ClientException(
+                __($e->getMessage())
+            );
+        } catch (\Laminas\Http\Client\Exception\ExceptionInterface $e) {
             throw new ClientException(
                 __($e->getMessage())
             );

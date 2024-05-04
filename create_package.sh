@@ -18,9 +18,9 @@ echo "${bold}Package version: ${green}${PACKAGE_VERSION}${normal}"
 echo "Creating package..."
 echo "Version: ${bold}$PACKAGE_VERSION ${normal}"
 
-rm -rf bm-bluepayment-*.zip
+rm -rf volt-payment-22-*.zip
 
-zip -r "volt-payment-$PACKAGE_VERSION.zip" ./ \
+zip -r "volt-payment-22-$PACKAGE_VERSION.zip" ./ \
   -x *.idea* \
   -x *.git* \
   -x *.DS_Store* \
@@ -28,4 +28,4 @@ zip -r "volt-payment-$PACKAGE_VERSION.zip" ./ \
   -x *.doc*
 
 echo "======================================================================================================"
-echo "${green}Package ${bold}volt-payment-$PACKAGE_VERSION.zip${normal}${green} created"
+echo "${green}Package ${bold}volt-payment-22-$PACKAGE_VERSION.zip${normal}${green} created"

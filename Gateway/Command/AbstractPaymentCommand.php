@@ -17,10 +17,10 @@ use Volt\Payment\Model\Repository\TransactionRepository;
 
 abstract class AbstractPaymentCommand implements CommandInterface
 {
-    public const KEY_PAYMENT = 'payment';
-    public const KEY_REFERENCE = 'reference';
-    public const KEY_AMOUNT = 'amount';
-    public const KEY_STATUS = 'status';
+    const KEY_PAYMENT = 'payment';
+    const KEY_REFERENCE = 'reference';
+    const KEY_AMOUNT = 'amount';
+    const KEY_STATUS = 'status';
 
     /**
      * @var TransactionRepository
@@ -80,7 +80,7 @@ abstract class AbstractPaymentCommand implements CommandInterface
         TransactionInterface $transaction,
         OrderPaymentInterface $payment,
         array $commandSubject
-    ): void;
+    );
 
     /**
      * Execute command basing on business object
@@ -88,7 +88,7 @@ abstract class AbstractPaymentCommand implements CommandInterface
      * @param array $commandSubject
      * @return void
      */
-    public function execute(array $commandSubject): void
+    public function execute(array $commandSubject)
     {
         try {
             $transaction = $this->getTransaction($commandSubject);
@@ -118,7 +118,7 @@ abstract class AbstractPaymentCommand implements CommandInterface
      * @return TransactionInterface|null
      * @throws NoSuchEntityException
      */
-    protected function getTransaction(array $commandSubject): ?TransactionInterface
+    protected function getTransaction(array $commandSubject)
     {
         $txnId = $commandSubject[self::KEY_PAYMENT];
 
@@ -128,9 +128,9 @@ abstract class AbstractPaymentCommand implements CommandInterface
     /**
      * @param TransactionInterface $transaction
      *
-     * @return OrderPaymentInterface
+     * @return OrderPaymentInterface|null
      */
-    protected function getPaymentByTransaction(TransactionInterface $transaction): ?OrderPaymentInterface
+    protected function getPaymentByTransaction(TransactionInterface $transaction)
     {
         return $this->orderPaymentRepository->get($transaction->getPaymentId());
     }

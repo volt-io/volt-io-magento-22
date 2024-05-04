@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Volt\Payment\Controller\Payment;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
@@ -15,13 +13,8 @@ use Throwable;
 use Volt\Payment\Exception\NotificationException;
 use Volt\Payment\Gateway\NotificationProcessor;
 
-class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
+class Notification extends Action
 {
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
     /**
      * @var RawFactory
      */
@@ -45,20 +38,21 @@ class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
     /**
      * Notification constructor.
      *
-     * @param RequestInterface $request
-     * @param RawFactory $resultRawFactory
-     * @param Json $json
-     * @param LoggerInterface $logger
-     * @param NotificationProcessor $notificationProcessor
+     * @param  Context  $context
+     * @param  RawFactory  $resultRawFactory
+     * @param  Json  $json
+     * @param  LoggerInterface  $logger
+     * @param  NotificationProcessor  $notificationProcessor
      */
     public function __construct(
-        RequestInterface      $request,
-        RawFactory            $resultRawFactory,
-        Json                  $json,
-        LoggerInterface       $logger,
+        Context $context,
+        RawFactory $resultRawFactory,
+        Json $json,
+        LoggerInterface $logger,
         NotificationProcessor $notificationProcessor
     ) {
-        $this->request = $request;
+        parent::__construct($context);
+
         $this->resultRawFactory = $resultRawFactory;
         $this->json = $json;
         $this->logger = $logger;
@@ -70,12 +64,12 @@ class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
         $response = $this->resultRawFactory->create();
 
         try {
-            $content = $this->request->getContent();
+            $content = $this->_request->getContent();
 
             $subject = [
                 'body' => $content,
                 'params' => $this->json->unserialize($content),
-                'headers' => $this->request->getHeaders()->toArray(),
+                'headers' => $this->_request->getHeaders()->toArray(),
             ];
 
             $this->notificationProcessor->execute($subject);
@@ -85,9 +79,9 @@ class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
 
             $this->logger->debug('Notification processed', [
                 'request' => [
-                    'uri' => $this->request->getRequestUri(),
-                    'headers' => $this->request->getHeaders()->toArray(),
-                    'content' => $this->request->getContent(),
+                    'uri' => $this->_request->getRequestUri(),
+                    'headers' => $this->_request->getHeaders()->toArray(),
+                    'content' => $this->_request->getContent(),
                 ],
             ]);
         } catch(NotificationException $e) {
@@ -96,17 +90,17 @@ class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
 
             $this->logger->error($e->getMessage(), [
                 'request' => [
-                    'uri' => $this->request->getRequestUri(),
-                    'headers' => $this->request->getHeaders()->toArray(),
-                    'content' => $this->request->getContent(),
+                    'uri' => $this->_request->getRequestUri(),
+                    'headers' => $this->_request->getHeaders()->toArray(),
+                    'content' => $this->_request->getContent(),
                 ],
             ]);
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage(), [
                 'request' => [
-                    'uri' => $this->request->getRequestUri(),
-                    'headers' => $this->request->getHeaders()->toArray(),
-                    'content' => $this->request->getContent(),
+                    'uri' => $this->_request->getRequestUri(),
+                    'headers' => $this->_request->getHeaders()->toArray(),
+                    'content' => $this->_request->getContent(),
                 ],
             ]);
 
@@ -115,25 +109,5 @@ class Notification implements HttpPostActionInterface, CsrfAwareActionInterface
         }
 
         return $response;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param RequestInterface $request
-     * @return InvalidRequestException|null
-     */
-    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
-    {
-        return null;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param RequestInterface $request
-     * @return bool|null
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
     }
 }

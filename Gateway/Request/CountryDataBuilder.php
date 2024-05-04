@@ -13,7 +13,7 @@ class CountryDataBuilder implements BuilderInterface
     /**
      * The list of banks shown on the checkout page is determined by the country chosen, which can be set in a number of ways. If, as a merchant, you’re only configured to use one country, that country will be used.
      */
-    public const COUNTRY = 'country';
+    const COUNTRY = 'country';
 
     /**
      * @var SubjectReader

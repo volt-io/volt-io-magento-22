@@ -22,7 +22,7 @@ class PaymentReceived extends AbstractPaymentCommand
         TransactionInterface $transaction,
         OrderPaymentInterface $payment,
         array $commandSubject
-    ): void {
+    ) {
         $order = $payment->getOrder();
         $comment = $this->getComment($commandSubject);
 

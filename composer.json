@@ -1,14 +1,14 @@
 {
-    "name": "volt-io/volt-io-magento",
-    "description": "Official Volt integration for Magento 2",
+    "name": "volt-io/volt-io-magento-22",
+    "description": "Official Volt integration for Magento 2.2",
     "require": {
-        "php": "~7.1.0|~7.2.0|~7.3.0|~7.4.0|~8.1.0|~8.2.0",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
         "ext-json": "*",
         "ext-curl": "*",
-        "magento/framework": "102.*|103.*",
-        "magento/module-checkout": "100.3.*|100.4.*",
-        "magento/module-payment": "100.3.*|100.4.*",
-        "magento/module-sales": "102.*|103.*"
+        "magento/framework": "101.*",
+        "magento/module-checkout": "100.2.*",
+        "magento/module-payment": "100.2.*",
+        "magento/module-sales": "101.*"
     },
     "type": "magento2-module",
     "version": "1.1.0",

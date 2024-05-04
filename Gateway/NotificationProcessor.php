@@ -51,7 +51,7 @@ class NotificationProcessor
      * @return void
      * @throws NotificationException
      */
-    public function execute(array $subject): void
+    public function execute(array $subject)
     {
         if ($this->validator) {
             $validationResult = $this->validator->validate($subject);

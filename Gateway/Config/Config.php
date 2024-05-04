@@ -10,19 +10,19 @@ use Magento\Sales\Model\Order\Config as OrderConfig;
 
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    public const KEY_ACTIVE = 'active';
-    public const KEY_TITLE = 'title';
-    public const KEY_SANDBOX = 'sandbox';
-    public const KEY_CLIENT_ID = 'client_id';
-    public const KEY_CLIENT_SECRET = 'client_secret';
-    public const KEY_NOTIFICATION_SECRET = 'notification_secret';
-    public const KEY_USERNAME = 'username';
-    public const KEY_PASSWORD = 'password';
-    public const KEY_PRODUCTION_URL = 'production_url';
-    public const KEY_SANDBOX_URL = 'sandbox_url';
-    public const KEY_STATUS_PENDING = 'status_pending';
-    public const KEY_STATUS_RECEIVED = 'status_received';
-    public const KEY_STATUS_FAILED = 'status_failed';
+    const KEY_ACTIVE = 'active';
+    const KEY_TITLE = 'title';
+    const KEY_SANDBOX = 'sandbox';
+    const KEY_CLIENT_ID = 'client_id';
+    const KEY_CLIENT_SECRET = 'client_secret';
+    const KEY_NOTIFICATION_SECRET = 'notification_secret';
+    const KEY_USERNAME = 'username';
+    const KEY_PASSWORD = 'password';
+    const KEY_PRODUCTION_URL = 'production_url';
+    const KEY_SANDBOX_URL = 'sandbox_url';
+    const KEY_STATUS_PENDING = 'status_pending';
+    const KEY_STATUS_RECEIVED = 'status_received';
+    const KEY_STATUS_FAILED = 'status_failed';
 
     /** @var OrderConfig */
     private $orderConfig;

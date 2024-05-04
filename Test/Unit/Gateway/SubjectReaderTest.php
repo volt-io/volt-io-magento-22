@@ -28,7 +28,7 @@ class SubjectReaderTest extends TestCase
      */
     private $subjectReader;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 

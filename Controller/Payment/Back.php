@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace Volt\Payment\Controller\Payment;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Result\Page;
 use Psr\Log\LoggerInterface;
 use Volt\Payment\Model\StatusEnum;
 
-class Back implements HttpGetActionInterface
+class Back extends Action
 {
-    /**
-     * @var ResultFactory
-     */
-    private $resultFactory;
-
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
     /**
      * @var Json
      */
@@ -43,21 +34,21 @@ class Back implements HttpGetActionInterface
     /**
      * Back constructor.
      *
-     * @param ResultFactory $resultFactory
-     * @param RequestInterface $request
-     * @param Json $json
-     * @param LoggerInterface $logger
-     * @param MessageManagerInterface $messageManager
+     * @param  Context  $context
+     * @param  ResultFactory  $resultFactory
+     * @param  Json  $json
+     * @param  LoggerInterface  $logger
+     * @param  MessageManagerInterface  $messageManager
      */
     public function __construct(
+        Context $context,
         ResultFactory $resultFactory,
-        RequestInterface $request,
         Json $json,
         LoggerInterface $logger,
         MessageManagerInterface $messageManager
     ) {
+        parent::__construct($context);
         $this->resultFactory = $resultFactory;
-        $this->request = $request;
         $this->json = $json;
         $this->logger = $logger;
         $this->messageManager = $messageManager;
@@ -65,7 +56,7 @@ class Back implements HttpGetActionInterface
 
     public function execute()
     {
-        $data = $this->request->getParam('volt');
+        $data = $this->_request->getParam('volt');
 
         if ($data && is_string($data)) {
             $data = $this->json->unserialize(base64_decode($data));
@@ -73,7 +64,7 @@ class Back implements HttpGetActionInterface
 
         if (! isset($data['status'])) {
             $this->logger->error('Invalid back data', [
-                'params' => $this->request->getParams(),
+                'params' => $this->_request->getParams(),
                 'data' => $data
             ]);
             $this->messageManager->addErrorMessage(__('Invalid return data'));
@@ -96,9 +87,9 @@ class Back implements HttpGetActionInterface
      * Prepare response for pending status (waiting for payment confirmation).
      *
      * @param $data
-     * @return Redirect
+     * @return Page
      */
-    private function prepareResponseForPending($data): Redirect
+    private function prepareResponseForPending($data): Page
     {
         $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $result->getConfig()->getTitle()->set(__('Waiting for payment confirmation'));

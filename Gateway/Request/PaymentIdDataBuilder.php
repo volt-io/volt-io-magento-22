@@ -13,12 +13,12 @@ class PaymentIdDataBuilder implements BuilderInterface
      * Each payment requires a unique reference and, to prevent duplicate payments,
      * we’ll automatically reject requests where you’ve used the reference before.
      */
-    public const UNIQUE_REFERENCE = 'uniqueReference';
+    const UNIQUE_REFERENCE = 'uniqueReference';
 
     /**
      * The maximum length of the reference is 18 characters
      */
-    public const REFERENCE_LENGTH = 18;
+    const REFERENCE_LENGTH = 18;
 
     public function build(array $buildSubject): array
     {
