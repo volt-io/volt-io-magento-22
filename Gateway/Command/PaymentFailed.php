@@ -13,6 +13,9 @@ class PaymentFailed extends AbstractPaymentCommand
     /** Key for detailed status (if exists). */
     const DETAILED_STATUS_KEY = 'detailedStatus';
 
+    /** Value for detailed status which we need to ignore (for 3 hours). */
+    const ABANDONED_BY_USER = 'ABANDONED_BY_USER';
+
     /**
      * Process payment.
      *
@@ -29,38 +32,31 @@ class PaymentFailed extends AbstractPaymentCommand
         $order = $payment->getOrder();
         $comment = $this->getComment($commandSubject);
 
-        if ($order->canCancel() && ! $transaction->getIsClosed()) {
-            $order->cancel();
-
-            $status = $this->config->getStatusFailed((int) $order->getStoreId());
-            $state = $this->getStateForStatus->execute($status, Order::STATE_CANCELED);
-
+        if (
+            $order->canCancel()
+            && ! $transaction->getIsClosed()
+            && $this->getDetailedStatus($commandSubject) !== self::ABANDONED_BY_USER
+        ) {
             $payment
-                ->setTransactionId($transaction->getTxnId())
-                ->setIsTransactionPending(false)
-                ->setIsTransactionClosed(false);
+                ->setTransactionId($transaction->getTxnId());
 
-            $order
-                ->addStatusToHistory($status, $comment, false)
-                ->setState($state)
-                ->setIsCustomerNotified(false);
+            $this->cancelOrder->execute($order, $payment, $comment);
         } else {
             $order
                 ->addCommentToStatusHistory($comment)
                 ->setIsCustomerNotified(false);
-        }
 
-        $this->orderRepository->save($order);
+            $this->orderRepository->save($order);
+        }
     }
 
     protected function getComment(array $commandSubject): string
     {
         $comment = parent::getComment($commandSubject);
 
-        $additionalInfo = [];
-        if (isset($commandSubject[self::DETAILED_STATUS_KEY])) {
-            $additionalInfo['Detailed status'] = $commandSubject[self::DETAILED_STATUS_KEY];
-        }
+        $additionalInfo = [
+            'Detailed status' => $this->getDetailedStatus($commandSubject),
+        ];
 
         foreach ($additionalInfo as $key => $value) {
             $comment .= ' - ' . $key . ': ' . $value;

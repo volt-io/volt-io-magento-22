@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Volt\Payment\Gateway;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
@@ -18,11 +17,6 @@ class NotificationProcessor
     private $logger;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @var CommandPoolInterface
      */
     private $commandPool;
@@ -34,12 +28,10 @@ class NotificationProcessor
 
     public function __construct(
         LoggerInterface $logger,
-        Json $serializer,
         CommandPoolInterface $commandPool,
         ValidatorInterface $validator = null
     ) {
         $this->logger = $logger;
-        $this->serializer = $serializer;
         $this->commandPool = $commandPool;
         $this->validator = $validator;
     }

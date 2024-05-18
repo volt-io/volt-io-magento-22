@@ -235,4 +235,13 @@
             <argument name="validator" xsi:type="object">VoltNotificationValidator</argument>
         </arguments>
     </type>
+
+    <!-- CLI Commands -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="volt_update_abandoned" xsi:type="object">Volt\Payment\Console\Command\UpdateAbandonedCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

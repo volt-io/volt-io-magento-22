@@ -1,5 +1,8 @@
 # What changed in Volt: Pay by Bank Module?
 
+## 1.1.1
+* Fixes for CRON and ABANDONED_BY_USER statuses.
+
 ## 1.1.0
 * Change API structure.
 * Add rest of Volt statuses to module.

@@ -12,6 +12,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Volt\Payment\Gateway\Config\Config;
+use Volt\Payment\Model\CancelOrder;
 use Volt\Payment\Model\GetStateForStatus;
 use Volt\Payment\Model\Repository\TransactionRepository;
 
@@ -21,6 +22,8 @@ abstract class AbstractPaymentCommand implements CommandInterface
     const KEY_REFERENCE = 'reference';
     const KEY_AMOUNT = 'amount';
     const KEY_STATUS = 'status';
+
+    const DETAILED_STATUS_KEY = 'detailedStatus';
 
     /**
      * @var TransactionRepository
@@ -52,13 +55,19 @@ abstract class AbstractPaymentCommand implements CommandInterface
      */
     protected $getStateForStatus;
 
+    /**
+     * @var CancelOrder
+     */
+    protected $cancelOrder;
+
     public function __construct(
         TransactionRepository $transactionRepository,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
         Config $config,
-        GetStateForStatus $getStateForStatus
+        GetStateForStatus $getStateForStatus,
+        CancelOrder $cancelOrder
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->orderPaymentRepository = $orderPaymentRepository;
@@ -66,6 +75,7 @@ abstract class AbstractPaymentCommand implements CommandInterface
         $this->logger = $logger;
         $this->config = $config;
         $this->getStateForStatus = $getStateForStatus;
+        $this->cancelOrder = $cancelOrder;
     }
 
     /**
@@ -108,6 +118,12 @@ abstract class AbstractPaymentCommand implements CommandInterface
             return;
         }
 
+        $payment->setAdditionalInformation(
+            self::DETAILED_STATUS_KEY,
+            $this->getDetailedStatus($commandSubject)
+        );
+        $this->orderPaymentRepository->save($payment);
+
         $this->process($transaction, $payment, $commandSubject);
     }
 
@@ -133,6 +149,21 @@ abstract class AbstractPaymentCommand implements CommandInterface
     protected function getPaymentByTransaction(TransactionInterface $transaction)
     {
         return $this->orderPaymentRepository->get($transaction->getPaymentId());
+    }
+
+    /**
+     *
+     *
+     * @param  array  $commandSubject
+     * @return string|null
+     */
+    protected function getDetailedStatus(array $commandSubject): ?string
+    {
+        if (isset($commandSubject[self::DETAILED_STATUS_KEY])) {
+            return $commandSubject[self::DETAILED_STATUS_KEY];
+        }
+
+        return null;
     }
 
     /**
