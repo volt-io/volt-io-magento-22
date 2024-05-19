@@ -22,7 +22,7 @@ class UpdateAbandonedCommand extends Command
         $this->updateAbandonedService = $updateAbandonedService;
     }
 
-    protected function configure(): void
+    protected function configure()
     {
         $this->setName('volt:update-abandoned');
         $this->setDescription('Update abandoned payments. After receiving ABANDONED_BY_USER status, we\'re waiting 3 hours to change status of order to failed payment.');
