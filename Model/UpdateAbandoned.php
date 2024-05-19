@@ -15,7 +15,7 @@ class UpdateAbandoned
     /**
      * @var int Hours after ABANDONED check.
      */
-    protected const HOURS = 3;
+    const HOURS = 3;
 
     /**
      * @var OrderPaymentRepositoryInterface
