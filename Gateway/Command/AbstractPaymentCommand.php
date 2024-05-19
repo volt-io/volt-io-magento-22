@@ -157,7 +157,7 @@ abstract class AbstractPaymentCommand implements CommandInterface
      * @param  array  $commandSubject
      * @return string|null
      */
-    protected function getDetailedStatus(array $commandSubject): ?string
+    protected function getDetailedStatus(array $commandSubject)
     {
         if (isset($commandSubject[self::DETAILED_STATUS_KEY])) {
             return $commandSubject[self::DETAILED_STATUS_KEY];
