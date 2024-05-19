@@ -2,6 +2,7 @@
 
 ## 1.1.1
 * Fixes for CRON and ABANDONED_BY_USER statuses.
+* Make inputs for credientals in the configuration obscure (showing *** instead of plain text).
 
 ## 1.1.0
 * Change API structure.
