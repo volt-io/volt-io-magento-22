@@ -11,8 +11,8 @@ use Magento\Sales\Api\Data\TransactionInterface;
 
 abstract class AbstractRefundCommand extends AbstractPaymentCommand implements CommandInterface
 {
-    const KEY_REFUND_ID = 'refundId';
-    const KEY_PAYMENT_ID = 'paymentId';
+    const KEY_REFUND = 'refund';
+    const KEY_PAYMENT = 'payment';
     const KEY_AMOUNT = 'amount';
     const KEY_CURRENCY = 'currency';
     const KEY_STATUS = 'status';
@@ -26,7 +26,7 @@ abstract class AbstractRefundCommand extends AbstractPaymentCommand implements C
      */
     protected function getTransaction(array $commandSubject)
     {
-        $txnId = $commandSubject[self::KEY_PAYMENT_ID];
+        $txnId = $commandSubject[self::KEY_PAYMENT];
 
         return $this->transactionRepository->getByTxnId($txnId);
     }
@@ -50,8 +50,8 @@ abstract class AbstractRefundCommand extends AbstractPaymentCommand implements C
     protected function getComment(array $commandSubject): string
     {
         $comment = '[Volt: Pay by Bank] Received refund notification';
-        $comment .= ' - Refund ID: ' . $commandSubject[self::KEY_REFUND_ID];
-        $comment .= ' - Payment ID: ' . $commandSubject[self::KEY_PAYMENT_ID];
+        $comment .= ' - Refund ID: ' . $commandSubject[self::KEY_REFUND];
+        $comment .= ' - Payment ID: ' . $commandSubject[self::KEY_PAYMENT];
         $comment .= ' - Amount: ' . $commandSubject[self::KEY_AMOUNT];
         $comment .= ' - Currency: ' . $commandSubject[self::KEY_CURRENCY];
         $comment .= ' - Status: ' . $commandSubject[self::KEY_STATUS];
